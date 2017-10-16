@@ -1,2 +1,2 @@
 # pyto
-A game.
+A "Python" game implementation written on ReactJS.

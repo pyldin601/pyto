@@ -5,11 +5,12 @@
     "module": "commonjs",
     "allowJs": true,
     "outDir": "../../dist",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "lib": ["es2015"],
     "moduleResolution": "node"
   },
-  "files": [
-    "./server.ts"
+  "include": [
+    "*",
+    "../../types/*"
   ]
 }

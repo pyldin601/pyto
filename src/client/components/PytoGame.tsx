@@ -39,10 +39,9 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
   }
 
   render() {
-    const picture: number[] = [];
+    const picture = [];
     return (
       <div>
-        <h1>Field</h1>
         <Field
           width={this.props.width}
           height={this.props.height}

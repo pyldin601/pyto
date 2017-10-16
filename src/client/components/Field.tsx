@@ -6,7 +6,7 @@ interface FieldInterface {
   picture: number[],
 }
 
-export default (props: FieldInterface): React.SFC<FieldInterface> => {
+export default (props: FieldInterface) => {
   return (
     <div className="field">
       Hello

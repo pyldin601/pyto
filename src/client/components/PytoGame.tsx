@@ -16,7 +16,7 @@ interface PytoGameStateInterface {
 }
 
 export default class PytoGame extends React.Component<PytoGamePropsInterface, PytoGameStateInterface> {
-  private timer;
+  private timer: number;
 
   constructor(props: PytoGamePropsInterface) {
     super(props);
@@ -31,21 +31,30 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
   onNextTick() {}
 
   componentDidMount() {
-    this.timer = setInterval(() => this.onNextTick(), TIMER_INTERVAL);
+    this.timer = window.setInterval(() => this.onNextTick(), TIMER_INTERVAL);
   }
 
   componentWillUnmount() {
     clearInterval(this.timer);
   }
 
+  renderPicture() {
+    const lineSize = this.props.width * this.props.height;
+    const field = new Array<string>(lineSize).fill('empty');
+    field[this.state.player.meat] = 'meat';
+    this.state.player.shake.forEach(part => {
+      field[part] = 'shake';
+    });
+    return field;
+  }
+
   render() {
-    const picture = [];
     return (
       <div>
         <Field
           width={this.props.width}
           height={this.props.height}
-          picture={picture}
+          picture={this.renderPicture()}
         />
       </div>
     );

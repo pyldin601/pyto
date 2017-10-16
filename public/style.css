@@ -1,4 +1,24 @@
 body {
     background: #334455;
+    padding: 0;
+    margin: 0;
 }
 
+.field {
+    background-color: #000000;
+    clear: both;
+}
+
+.field .pixel {
+    float: left;
+}
+
+.field .pixel.empty {}
+
+.field .pixel.meat {
+    background-color: #99aabb;
+}
+
+.field .pixel.shake {
+    background-color: white;
+}

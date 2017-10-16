@@ -30,6 +30,7 @@ enum KeyCodes {
 export default class PytoGame extends React.Component<PytoGamePropsInterface, PytoGameStateInterface> {
   private timer: number;
   private square: number;
+  private field: HTMLDivElement;
 
   constructor(props: PytoGamePropsInterface) {
     super(props);
@@ -151,6 +152,7 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
       () => this.onNextTick(),
       TIMER_INTERVAL,
     );
+    this.field.focus();
   }
 
   componentWillUnmount() {
@@ -173,7 +175,7 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
   render() {
     if (this.state.gameState === 'play') {
       return (
-        <div tabIndex={0} onKeyDown={this.onKeyPress}>
+        <div tabIndex={0} onKeyDown={this.onKeyPress} ref={ (element: HTMLDivElement) => this.field = element }>
           <Field
             width={this.props.width}
             height={this.props.height}
@@ -185,7 +187,6 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
 
     return (
       <div>
-
         <div className="field">
           <div className="gameover">GAME OVER</div>
         </div>

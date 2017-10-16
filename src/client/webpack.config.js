@@ -32,5 +32,9 @@ module.exports = {
       name: 'vendor',
       minChunks: ({resource}) => /node_modules/.test(resource),
     }),
-  ]
+  ],
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM"
+  },
 };

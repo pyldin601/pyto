@@ -5,8 +5,15 @@ body {
 }
 
 .field {
+    width: 500px;
+    height: 500px;
     background-color: #000000;
     clear: both;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -250px;
 }
 
 .field .pixel {

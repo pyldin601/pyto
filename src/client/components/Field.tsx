@@ -9,8 +9,8 @@ interface FieldInterface {
 
 export default ({ width, height, picture }: FieldInterface) => {
   const fieldStyle = {
-    width: `${width * 8}px`,
-    height: `${height * 8}px`,
+    width: `${width * 16}px`,
+    height: `${height * 16}px`,
   };
 
   const pixelStyle = {

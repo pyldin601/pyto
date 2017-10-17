@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { last, includes } from 'lodash';
+import * as numeral from 'numeral';
 import Field from './Field';
 import { mod } from '../../shared/util/math';
 
@@ -204,7 +205,7 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
             picture={this.renderPicture()}
           />
           <div className="score">
-            Score: {this.state.player.shake.length - 3}
+            Score: {numeral(this.state.player.shake.length - 3).format('0000')}
           </div>
         </div>
       );

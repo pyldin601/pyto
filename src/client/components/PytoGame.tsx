@@ -26,7 +26,7 @@ enum KeyCodes {
   UP = 38,
   DOWN = 40,
   LEFT = 37,
-  RIGHT = 39
+  RIGHT = 39,
 }
 
 export default class PytoGame extends React.Component<PytoGamePropsInterface, PytoGameStateInterface> {
@@ -117,10 +117,10 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
         break;
       case KeyCodes.RIGHT:
         this.setStepAndDirection(1, 'h');
-        return;
+        break;
       case KeyCodes.LEFT:
         this.setStepAndDirection(-1, 'h');
-        return;
+        break;
     }
     this.setState({ pressedKey: null });
   }

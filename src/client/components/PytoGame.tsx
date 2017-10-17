@@ -18,7 +18,7 @@ interface PytoGameStateInterface {
     step: number,
     direction: 'v' | 'h',
   },
-  gameState: 'play' | 'over',
+  gameState: 'play' | 'over' | 'pause',
   pressedKey: number | null,
 }
 
@@ -27,6 +27,7 @@ enum KeyCodes {
   DOWN = 40,
   LEFT = 37,
   RIGHT = 39,
+  SPACE = 32,
 }
 
 export default class PytoGame extends React.Component<PytoGamePropsInterface, PytoGameStateInterface> {
@@ -121,8 +122,23 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
       case KeyCodes.LEFT:
         this.setStepAndDirection(-1, 'h');
         break;
+      case KeyCodes.SPACE:
+        this.pauseGame();
+        break;
     }
     this.setState({ pressedKey: null });
+  }
+
+  pauseGame() {
+    const gameState = this.state.gameState;
+
+    if (gameState === 'over') {
+      return;
+    }
+
+    this.setState({
+      gameState: (gameState === 'pause' ? 'play' : 'pause'),
+    })
   }
 
   calculateNextPosition(): number {
@@ -196,32 +212,48 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
   }
 
   render() {
-    if (this.state.gameState === 'play') {
+    const scoreView = (
+      <div className="score">
+        Score: {numeral(this.state.player.shake.length - 3).format('0000')}
+      </div>
+    );
+
+    if (this.state.gameState === 'over') {
       return (
         <div>
-          <Field
-            width={this.props.width}
-            height={this.props.height}
-            picture={this.renderPicture()}
-          />
-          <div className="score">
-            Score: {numeral(this.state.player.shake.length - 3).format('0000')}
+          <div className="field">
+            <div className="message red">
+              GAME OVER
+            </div>
           </div>
+          {scoreView}
+        </div>
+      );
+    }
+
+    if (this.state.gameState === 'pause') {
+      return (
+        <div>
+          <div className="field">
+            <div className="message">
+              PAUSED
+            </div>
+          </div>
+          {scoreView}
         </div>
       );
     }
 
     return (
       <div>
-        <div className="field">
-          <div className="gameover">
-            GAME OVER
-          </div>
-        </div>
-        <div className="score">
-          Score: {this.state.player.shake.length - 3}
-        </div>
+        <Field
+          width={this.props.width}
+          height={this.props.height}
+          picture={this.renderPicture()}
+        />
+        {scoreView}
       </div>
     );
+
   }
 }

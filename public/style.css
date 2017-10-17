@@ -33,14 +33,18 @@ body {
     margin-top: -250px;
 }
 
-.field .gameover {
+.field .message {
     font-size: 36px;
-    color: #ff5555;
+    color: #ffffff;
     position: relative;
     float: left;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.field .red {
+    color: #ff5555;
 }
 
 .field .pixel {

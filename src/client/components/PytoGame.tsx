@@ -3,7 +3,7 @@ import { last, includes } from 'lodash';
 import Field from './Field';
 import { mod } from '../../shared/util/math';
 
-const TIMER_INTERVAL = 150;
+const TIMER_INTERVAL = 250;
 
 interface PytoGamePropsInterface {
   width: number,
@@ -17,7 +17,8 @@ interface PytoGameStateInterface {
     step: number,
     direction: 'v' | 'h',
   },
-  gameState: 'play' | 'over'
+  gameState: 'play' | 'over',
+  pressedKey: number | null,
 }
 
 enum KeyCodes {
@@ -30,7 +31,6 @@ enum KeyCodes {
 export default class PytoGame extends React.Component<PytoGamePropsInterface, PytoGameStateInterface> {
   private timer: number;
   private square: number;
-  private field: HTMLDivElement;
 
   constructor(props: PytoGamePropsInterface) {
     super(props);
@@ -38,15 +38,37 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
     this.state = {
       player: {
         shake: [0, 1, 2],
-        egg: 30,
+        egg: 3,
         step: 1,
         direction: 'h',
       },
       gameState: 'play',
+      pressedKey: null,
     };
     this.square = this.props.width * this.props.height;
 
     this.onKeyPress = this.onKeyPress.bind(this);
+  }
+
+  componentDidMount() {
+    this.timer = window.setInterval(
+      () => this.onNextTick(),
+      TIMER_INTERVAL,
+    );
+    document.addEventListener('keydown', this.onKeyPress, false);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    document.removeEventListener('keydown', this.onKeyPress);
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    this.setState({ pressedKey: event.keyCode });
+  }
+
+  getShakeHead(): number {
+    return last(this.state.player.shake) as number;
   }
 
   setStepAndDirection(step: number, direction: PytoGameStateInterface['player']['direction']) {
@@ -61,20 +83,9 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
     });
   }
 
-  onKeyPress(event: React.KeyboardEvent<any>) {
-    switch (event.which) {
-      case KeyCodes.DOWN:
-        return this.setStepAndDirection(this.props.width, 'v');
-      case KeyCodes.UP:
-        return this.setStepAndDirection(-this.props.width, 'v');
-      case KeyCodes.RIGHT:
-        return this.setStepAndDirection(1, 'h');
-      case KeyCodes.LEFT:
-        return this.setStepAndDirection(-1, 'h');
-    }
-  }
-
   onNextTick() {
+    this.reactOnPressedKey();
+
     if (this.state.gameState !== 'play') {
       return;
     }
@@ -93,10 +104,29 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
     return this.moveShake(nextPosition);
   }
 
+  reactOnPressedKey() {
+    switch (this.state.pressedKey) {
+      case null:
+        return;
+      case KeyCodes.DOWN:
+        this.setStepAndDirection(this.props.width, 'v');
+        break;
+      case KeyCodes.UP:
+        this.setStepAndDirection(-this.props.width, 'v');
+        break;
+      case KeyCodes.RIGHT:
+        this.setStepAndDirection(1, 'h');
+        return;
+      case KeyCodes.LEFT:
+        this.setStepAndDirection(-1, 'h');
+        return;
+    }
+    this.setState({ pressedKey: null });
+  }
+
   calculateNextPosition(): number {
-    const shake = this.state.player.shake;
     const step = this.state.player.step;
-    const shakeHead = last(shake) as number;
+    const shakeHead = this.getShakeHead();
 
     const move = ({
       h: (head: number) => {
@@ -131,32 +161,24 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
     });
   }
 
-  placeEgg() {
+  getNextEggPosition() {
     let pos;
 
     do {
       pos = Math.floor(Math.random() * this.square)
     } while (includes(this.state.player.shake, pos));
 
+    return pos;
+  }
+
+  placeEgg() {
     this.setState({
       ...this.state,
       player: {
         ...this.state.player,
-        egg: pos,
+        egg: this.getNextEggPosition(),
       },
     });
-  }
-
-  componentDidMount() {
-    this.timer = window.setInterval(
-      () => this.onNextTick(),
-      TIMER_INTERVAL,
-    );
-    this.field.focus();
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
   }
 
   renderPicture() {
@@ -175,12 +197,15 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
   render() {
     if (this.state.gameState === 'play') {
       return (
-        <div tabIndex={0} onKeyDown={this.onKeyPress} ref={ (element: HTMLDivElement) => this.field = element }>
+        <div>
           <Field
             width={this.props.width}
             height={this.props.height}
             picture={this.renderPicture()}
           />
+          <div className="score">
+            Score: {this.state.player.shake.length - 3}
+          </div>
         </div>
       );
     }
@@ -188,7 +213,12 @@ export default class PytoGame extends React.Component<PytoGamePropsInterface, Py
     return (
       <div>
         <div className="field">
-          <div className="gameover">GAME OVER</div>
+          <div className="gameover">
+            GAME OVER
+          </div>
+        </div>
+        <div className="score">
+          Score: {this.state.player.shake.length - 3}
         </div>
       </div>
     );

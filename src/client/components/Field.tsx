@@ -8,18 +8,13 @@ interface FieldInterface {
 }
 
 export default ({ width, height, picture }: FieldInterface) => {
-  const fieldStyle = {
-    width: `${width * 16}px`,
-    height: `${height * 16}px`,
-  };
-
   const pixelStyle = {
     width: `${100 / width}%`,
     height: `${100 / height}%`,
   };
 
   return (
-    <div className="field" style={fieldStyle}>
+    <div className="field">
       {picture.map((pixel, i) => {
         return <div key={i} className={cn('pixel', pixel)} style={pixelStyle}/>
       })}

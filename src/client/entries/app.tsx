@@ -3,6 +3,6 @@ import * as ReactDOM from 'react-dom';
 import PytoGame from '../components/PytoGame';
 
 ReactDOM.render(
-  <PytoGame width={32} height={32}/>,
+  <PytoGame width={16} height={16}/>,
   document.getElementById('app'),
 );

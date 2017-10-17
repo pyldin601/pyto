@@ -3,6 +3,21 @@ body {
     background: #334455;
     padding: 0;
     margin: 0;
+    overflow: hidden;
+}
+
+.score {
+    width: 500px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -300px;
+    color: #ffffff;
+    font-size: 36px;
+    text-align: left;
+    font-family: monospace;
 }
 
 .field {
@@ -13,6 +28,7 @@ body {
     position: absolute;
     left: 50%;
     top: 50%;
+    transition: rotate 0.25s linear;
     margin-left: -250px;
     margin-top: -250px;
 }
@@ -29,7 +45,7 @@ body {
 
 .field .pixel {
     float: left;
-    transition: all 0.1s ease-in;
+    /*transition: all 0.1s linear;*/
 }
 
 .field .pixel.empty {}

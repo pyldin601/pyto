@@ -49,6 +49,7 @@ body {
 
 .field .pixel {
     float: left;
+    border-radius: 50%;
     /*transition: all 0.1s linear;*/
 }
 
